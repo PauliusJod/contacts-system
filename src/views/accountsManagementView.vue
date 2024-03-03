@@ -1,0 +1,107 @@
+<template>
+  <div v-if="this.checkPermissions" class="px-16">
+    <p class="text-4xl font-light flex px-5">Sukurti admin paskyrą</p>
+    <div class="flex py-4">
+      <button class="px-4 py-3 mx-5 bg-blue-900 border border-blue-900 text-white rounded-full">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="26"
+          width="24"
+          fill="white"
+          viewBox="0 0 448 512"
+        >
+          <path
+            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+          />
+        </svg>
+      </button>
+      <p class="py-3">Sukurti naują admin paskyrą:</p>
+    </div>
+
+    <button
+      @click="toggleOpenModal('edit-permissions-form')"
+      class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      type="button"
+    >
+      Redaguoti kontaktą (laikinas)
+    </button>
+    <div class="grid grid-cols-3 py-8">
+      <div>
+        <div class="col-span-3 px-6 py-3 flex justify-start bg-gray-50">Vardas</div>
+        <div class="px-6 py-4 text-md text-gray-900 dark:text-white bg-white border-b">
+          <p class="py-2 flex justify-start">Vardas1</p>
+          <p class="py-2 flex justify-start">Vardas2</p>
+          <p class="py-2 flex justify-start">Vardas3</p>
+          <p class="py-2 flex justify-start">Vardas4</p>
+        </div>
+      </div>
+      <div>
+        <div class="col-span-3 px-6 py-3 flex justify-start bg-gray-50">El. paštas</div>
+        <div class="px-6 py-4 text-md text-gray-900 dark:text-white bg-white border-b">
+          <p class="py-2 flex h-10 justify-start">example@gmail.com</p>
+          <p class="py-2 flex h-10 justify-start">example@gmail.com</p>
+          <p class="py-2 flex h-10 justify-start">example@gmail.com</p>
+          <p class="py-2 flex h-10 justify-start">example@gmail.com</p>
+        </div>
+      </div>
+      <div>
+        <div class="col-span-3 px-6 py-3 bg-gray-50">Veiksmai</div>
+        <div class="col-span-1 px-6 py-4 bg-white border-b text-sm">
+          <div class="py-2 my-auto h-10 flex justify-center">
+            <button class="px-5 mx-2 bg-blue-900 text-white rounded-full">Keisti leidimus</button>
+            <button class="px-4 mx-2 bg-red-800 text-white rounded-full">Ištrinti</button>
+          </div>
+          <div class="py-2 my-auto h-10 flex justify-center">
+            <button class="px-5 mx-2 bg-blue-900 text-white rounded-full">Keisti leidimus</button>
+            <button class="px-4 mx-2 bg-red-800 text-white rounded-full">Ištrinti</button>
+          </div>
+          <div class="py-2 my-auto h-10 flex justify-center">
+            <button class="px-5 mx-2 bg-blue-900 text-white rounded-full">Keisti leidimus</button>
+            <button class="px-4 mx-2 bg-red-800 text-white rounded-full">Ištrinti</button>
+          </div>
+          <div class="py-2 my-auto h-10 flex justify-center">
+            <button class="px-5 mx-2 bg-blue-900 text-white rounded-full">Keisti leidimus</button>
+            <button class="px-4 mx-2 bg-red-800 text-white rounded-full">Ištrinti</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else></div>
+</template>
+
+<script>
+import { mapGetters, mapActions } from "vuex";
+export default {
+  name: "accountsManagementView",
+  data() {
+    return {
+      test: false,
+    };
+  },
+  computed: {
+    ...mapGetters({ checkPermissions: "getSuperAdminPermissions" }),
+  },
+  methods: {
+    ...mapActions({ syncPermissions: "getUserPermissionsData" }),
+    redirectToHomePage: function () {
+      this.$router.push({ path: "/" });
+    },
+    toggleOpenModal(name, data) {
+      // this.SET_TEMP_DATA({id: data.id, name: data.name})
+      this.$store.commit("SHOW_MODAL", name);
+      this.$store.commit("TOGGLE_VISIBLE");
+    },
+  },
+  watch: {
+    checkPermissions: function (newv) {
+      if (!newv) {
+        this.redirectToHomePage();
+      }
+    },
+  },
+  mounted() {
+    this.syncPermissions();
+  },
+};
+</script>
